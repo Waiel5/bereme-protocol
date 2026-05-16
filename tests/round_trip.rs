@@ -25,13 +25,13 @@
 
 use bereme_protocol::{
     AuditMessage, CloseMessage, CloudToDevice, CmdMessage, CmdResponseMessage, ConfigAckMessage,
-    ConfigNudgeMessage, DeviceInfoMessage, DeviceToCloud, Envelope, ErrorMessage,
-    FileChunkMessage, HeartbeatAckMessage, HeartbeatMessage, HttpReqMessage, HttpRespMessage,
-    LoadAvg, MemStats, OtaAckMessage, OtaPushMessage, OtaStage, RegisterAckMessage,
-    RegisterAckOutcome, RegisterMessage, TermCloseMessage, TermDataMessage, TermInputMessage,
-    TermOpenMessage, TermResizeMessage,
+    ConfigNudgeMessage, DeviceInfoMessage, DeviceToCloud, Envelope, ErrorMessage, FileChunkMessage,
+    HeartbeatAckMessage, HeartbeatMessage, HttpReqMessage, HttpRespMessage, LoadAvg, MemStats,
+    OtaAckMessage, OtaPushMessage, OtaStage, RegisterAckMessage, RegisterAckOutcome,
+    RegisterMessage, TermCloseMessage, TermDataMessage, TermInputMessage, TermOpenMessage,
+    TermResizeMessage,
 };
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use std::collections::BTreeMap;
 
 // ----------------------------------------------------------------------
@@ -331,10 +331,7 @@ fn c2d_config_nudge_round_trips() {
 fn c2d_ota_push_round_trips() {
     assert_round_trip_c2d(&CloudToDevice::OtaPush(OtaPushMessage {
         manifest_url: "https://updates.bereme.com/manifest-42.json".into(),
-        manifest_signatures: vec![
-            "base64-pki-sig".into(),
-            "base64-witness-sig".into(),
-        ],
+        manifest_signatures: vec!["base64-pki-sig".into(), "base64-witness-sig".into()],
         version_code: 42,
         plan_id: "plan-001".into(),
         deadline_unix: 1_780_000_000,
