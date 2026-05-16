@@ -1,0 +1,29 @@
+[package]
+name = "bereme-protocol-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+serde_json = "1"
+
+[dependencies.bereme-protocol]
+path = ".."
+
+[[bin]]
+name = "device_to_cloud"
+path = "fuzz_targets/device_to_cloud.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "cloud_to_device"
+path = "fuzz_targets/cloud_to_device.rs"
+test = false
+doc = false
+bench = false
