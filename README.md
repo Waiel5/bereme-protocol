@@ -38,17 +38,17 @@ Bumping the tag is a coordinated three-repo operation: tag this crate, then bump
 `DeviceToCloud` — 14 variants:
 
 ```
-register, heartbeat, pong, device_info, audit_event, config_ack,
-ota_ack, term_open, term_input, term_resize, term_close, term_data,
-cmd_result, http_response, file_chunk, error
+register, heartbeat, pong, term_data, term_close, file_chunk,
+http_resp, cmd_response, audit, device_info, config_ack, ota_ack,
+error, close
 ```
 
 `CloudToDevice` — 13 variants:
 
 ```
-register_ack, ping, config_nudge, ota_push, term_open, term_data,
-term_resize, term_close, cmd, http_req, heartbeat_ack, file_chunk,
-error
+register_ack, heartbeat_ack, ping, term_open, term_resize,
+term_input, term_close, cmd, http_req, config_nudge, ota_push,
+error, close
 ```
 
 Both enums use `#[serde(tag = "type", rename_all = "snake_case")]`. Every frame travels as a JSON text WebSocket message. The envelope provides:
@@ -69,12 +69,12 @@ pub struct OtaPushMessage {
     pub manifest_signatures: Vec<String>,
     pub version_code:        u64,
     pub plan_id:             String,
-    pub deadline_unix:       Option<i64>,
+    pub deadline_unix:       i64,
 }
 
 pub struct OtaAckMessage {
     pub plan_id:      String,
-    pub stage:        OtaStage,         // Verifying | Applying | RolledForward | Failed
+    pub stage:        OtaStage,         // Verifying | Applying | RolledForward | Failed | RolledBack
     pub version_code: u64,
     pub error:        Option<String>,
 }
@@ -103,7 +103,7 @@ SemVer-compatible. The package version is the wire-compat marker:
 ## Companion repos
 
 - [`Waiel5/kvm-rust`](https://github.com/Waiel5/kvm-rust) — device firmware. `kvm-cloud` consumes this crate.
-- [`Waiel5/cloud-rust`](https://github.com/Waiel5/cloud-rust) — cloud control plane. `cloud-protocol` re-exports from this crate (shim).
+- [`Waiel5/cloud-rust`](https://github.com/Waiel5/cloud-rust) — cloud control plane. `cloud-protocol` re-exports this crate's types.
 - [`Waiel5/bereme-e2e`](https://github.com/Waiel5/bereme-e2e) — cross-repo end-to-end tests.
 - [`Waiel5/bereme-kvm-docs`](https://github.com/Waiel5/bereme-kvm-docs) — cross-cutting architecture + threat model.
 

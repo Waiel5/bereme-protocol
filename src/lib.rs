@@ -27,8 +27,8 @@
 //! `#[serde(tag = "type", rename_all = "snake_case")]` on the two
 //! top-level enums.
 //!
-//! See `cloud-rust-hardening/WIRE-PROTOCOL.md` for the complete
-//! catalog and `cloud-rust-hardening/docs/hardening/evidence/wave05/`
+//! See `bereme-protocol/README.md` for the complete
+//! catalog and `kvm-rust/docs/hardening/evidence/wave05/`
 //! for the Phase 4 extraction record.
 
 #![forbid(unsafe_code)]

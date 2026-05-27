@@ -124,7 +124,7 @@ pub struct OtaPushMessage {
     /// witness). Encoded as base64 strings; the device validates them
     /// against `kvm_supervisor::install::validate_device_manifest`.
     pub manifest_signatures: Vec<String>,
-    pub version_code: u32,
+    pub version_code: u64,
     pub plan_id: String,
     /// Unix epoch (seconds, UTC) past which the device should give up
     /// and emit `OtaStage::Failed`.

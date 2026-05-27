@@ -1,6 +1,6 @@
 [package]
 name = "bereme-protocol"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 rust-version = "1.85"
 license = "Apache-2.0"
@@ -10,7 +10,7 @@ description = "Shared wire types for the JSON-WS v2 Bereme cloud↔device protoc
 # kvm-rust workspaces so it can be referenced via a path dependency
 # from each. Wave 5 Phase 4 extracts the previously cloud-only wire
 # types here so the device and the cloud type-check against the same
-# schema. See cloud-rust-hardening/WIRE-PROTOCOL.md §"Reference
+# schema. See bereme-protocol/README.md §"Reference
 # encoder/decoder" for the multi-consumer plan, and the wave-05
 # Phase 4 brief for the OtaPush/OtaAck additions.
 

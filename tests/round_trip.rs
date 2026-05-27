@@ -6,7 +6,7 @@
 //!   2. serializes it to JSON;
 //!   3. deserializes the result back into the same enum;
 //!   4. asserts structural equality (`v == round_trip(v)`);
-//!   5. re-serializes the parsed value and asserts byte-for-byte
+//!   5. re-serializes the parsed value and asserts API-compatible
 //!      equivalence with the first serialization (`encode(v) ==
 //!      encode(decode(encode(v)))`).
 //!

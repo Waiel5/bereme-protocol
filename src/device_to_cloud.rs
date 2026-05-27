@@ -152,7 +152,7 @@ pub struct ConfigAckMessage {
 pub struct OtaAckMessage {
     pub plan_id: String,
     pub stage: OtaStage,
-    pub version_code: u32,
+    pub version_code: u64,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
 }
