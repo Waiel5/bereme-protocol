@@ -20,18 +20,24 @@ The shape of every variant is exercised by `tests/round_trip.rs`'s 32 serde roun
 
 ## Why a separate crate
 
-Wave-05 of the Bereme KVM hardening pass extracted the wire types from `cloud-rust/crates/cloud-protocol` so the device firmware (`kvm-rust/crates/kvm-cloud`) and the cloud control plane (`cloud-rust/crates/cloud-protocol`) could both depend on the *same* serde-tagged Rust types — eliminating the prior `serde_json::Value` channels on the device side and the silent shape drift between repos.
+The wire types live in this separate crate so the device firmware
+(`kvm-rust/crates/kvm-cloud`) and the cloud control plane
+(`cloud-rust/crates/cloud-protocol`) both depend on the same serde-tagged Rust
+types. That eliminates ad hoc `serde_json::Value` channels on the device side
+and prevents silent shape drift between repos.
 
-Both production repos consume this crate via git-dep pinned to a tag:
+This local checkout consumes the crate through sibling path dependencies:
 
 ```toml
 # kvm-rust/Cargo.toml (workspace.dependencies)
-bereme-protocol = { git = "https://github.com/Waiel5/bereme-protocol.git", tag = "bereme-protocol-v0.1.1" }
+bereme-protocol = { path = "../bereme-protocol" }
 
-# cloud-rust/Cargo.toml (workspace.dependencies) — identical
+# cloud-rust/Cargo.toml (workspace.dependencies) — same sibling path
 ```
 
-Bumping the tag is a coordinated three-repo operation: tag this crate, then bump the pin in both consumer repos in the same PR/release window so wire compatibility stays in lock-step.
+Release builds may pin a git tag. Bumping a release tag is a coordinated
+three-repo operation: tag this crate, then bump both consumer repos in the same
+release window so wire compatibility stays in lock-step.
 
 ## Wire shape (summary)
 
@@ -96,7 +102,7 @@ MSRV is **Rust 1.85**. CI runs the MSRV gate on every push.
 
 SemVer-compatible. The package version is the wire-compat marker:
 
-- **0.1.x** — `PROTOCOL_VERSION = "2"` baseline. The wave-05 closure shipped 0.1.1; 0.1.0 differs only in `tests/round_trip.rs` rustfmt drift.
+- **0.1.x** — `PROTOCOL_VERSION = "2"` baseline.
 - A **new wire variant** that the cloud emits but the device does not understand is a `0.2.0` bump (cloud-only minor). The device-side deserializer tolerates unknown variants by warn-logging and continuing, so consumers will not crash — but the new variant's payload will be ignored on old devices.
 - A **renamed or removed variant** is a `1.0.0` bump (breaking).
 
