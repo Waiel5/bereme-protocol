@@ -15,6 +15,7 @@ A small Rust library (≤ 100 LOC of types per direction; no runtime, no async) 
 - `enum CloudToDevice` — every frame the cloud can send. Same tag pattern.
 - Per-variant payload structs (`RegisterMessage`, `HeartbeatMessage`, `OtaPushMessage`, `OtaAckMessage`, etc.) with explicit field names that match the documented wire spec verbatim.
 - `Envelope` — the common id/ts wrapper that frames carry for correlation.
+- `RustDeskCompatibilityPlan` and related `rustdesk_compat` types — a Bereme-owned planning contract for a future RustDesk compatibility route. These are metadata/review types only; they do not implement, copy, or describe RustDesk wire protocol.
 
 The shape of every variant is exercised by `tests/round_trip.rs`'s 32 serde round-trip tests. CI gates fmt, clippy, doc, and MSRV.
 
@@ -86,11 +87,27 @@ pub struct OtaAckMessage {
 }
 ```
 
+## RustDesk compatibility planning
+
+`rustdesk_compat` defines a small, serde-stable Bereme contract for planning a
+future compatibility bridge or fork:
+
+- `RustDeskCompatibilityMode` — `disabled`, `inventory_only`, `shadow`, `pilot`, `enabled`.
+- `RustDeskRouteKind` — `disabled`, `native_bridge`, `fork`.
+- `RustDeskInfrastructurePolicy` — `disabled`, `self_hosted_only`, `operator_managed`, `public_allowed`.
+- `RustDeskFeatureFlags` — Bereme capability booleans such as display stream, input control, file transfer, clipboard sync, audio stream, relay/rendezvous, unattended access, and audit correlation.
+- `RustDeskVersionPinMetadata` — optional upstream/adapter revision metadata and review notes.
+- `RustDeskAcceptanceGate` — review gates for license, security, protocol-boundary, interop, performance, audit integration, airgap egress, and rollback readiness.
+
+These types are intentionally not RustDesk protocol schemas. They are safe
+planning metadata for downstream bridge work, with defaults that deserialize
+older/minimal JSON to a disabled, non-activatable plan.
+
 ## Building / testing
 
 ```sh
 cargo build
-cargo test                                                # 32 round-trip variant tests
+cargo test                                                # serde round-trip + compatibility planning tests
 cargo test --all-features
 cargo doc --no-deps --all-features                        # public API surface
 cargo clippy --all-targets --all-features -- -D warnings

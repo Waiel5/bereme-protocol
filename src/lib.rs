@@ -37,6 +37,7 @@ pub mod cloud_to_device;
 pub mod common;
 pub mod device_to_cloud;
 pub mod envelope;
+pub mod rustdesk_compat;
 
 pub use cloud_to_device::{
     CloudToDevice, CmdMessage, ConfigNudgeMessage, HttpReqMessage, OtaPushMessage,
@@ -51,6 +52,12 @@ pub use device_to_cloud::{
     TermDataMessage,
 };
 pub use envelope::Envelope;
+pub use rustdesk_compat::{
+    RustDeskAcceptanceGate, RustDeskAcceptanceGateKind, RustDeskAcceptanceGateStatus,
+    RustDeskCompatibilityMode, RustDeskCompatibilityPlan, RustDeskFeatureFlags,
+    RustDeskInfrastructurePolicy, RustDeskRouteKind, RustDeskVersionPinMetadata,
+    RUSTDESK_COMPAT_CONTRACT_VERSION, RUSTDESK_REQUIRED_ACCEPTANCE_GATES,
+};
 
 /// Wire-protocol version surfaced via the `X-Protocol-Version`
 /// upgrade header. Bumping this string is a hard protocol break.
